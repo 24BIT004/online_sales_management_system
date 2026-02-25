@@ -31,7 +31,7 @@ const Register = () => {
         }
 
         try {
-            await axios.post("http://127.0.0.1:8000/register/", formData);
+            await axios.post("https://online-sales-management-system.onrender.com/register/", formData);
             alert("Registration successful!");
             navigate("/login"); // Redirect to login after registration
         } catch (err) {

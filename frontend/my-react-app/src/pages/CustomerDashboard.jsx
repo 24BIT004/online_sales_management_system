@@ -9,7 +9,7 @@ import img5 from "../assets/img5.png";
 
 import "./CustomerDashboard.css";
 
-const API_GUEST_ORDER = "http://127.0.0.1:8000/guest-order/";
+const API_GUEST_ORDER = "https://online-sales-management-system.onrender.com/guest-order/";
 
 function CustomerDashboard() {
     const [activeTab, setActiveTab] = useState("home");
