@@ -5,7 +5,13 @@ from rest_framework.exceptions import NotFound
 from django.db.models import Q
 from .models import GuestOrder
 from .serializers import UserRegisterSerializer, UserLoginSerializer, GuestOrderSerializer
+from django.http import HttpResponse
 
+
+
+
+def home(request):
+    return HttpResponse("Online Sales Management System is Running")
 
 # =========================
 # USER REGISTER (unchanged)
