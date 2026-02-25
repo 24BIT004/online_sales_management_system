@@ -1,10 +1,12 @@
 from pathlib import Path
+import os
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-46x@yuhohw*bso7bgonsie7v(k602f)9v1q2jw#s1#$=x_j*cb'
-DEBUG = True
-ALLOWED_HOSTS = []
+DEBUG = False
+
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -50,16 +52,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'OnlineSalesManagementSystem.wsgi.application'
 
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'online sales management system',
-        'USER':'postgres',
-        'PASWORD':'Ailene!1',
-        'HOST':'localhost',
-        'PORT':'5432',
-    }
+    'default': dj_database_url.parse(
+        os.environ.get("DATABASE_URL", "")
+    )
 }
+
+
+ALLOWED_HOSTS = ['*']
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
@@ -68,9 +70,16 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://onlinesalesmanagementsystem.onrender.com"
+]
+
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = []
