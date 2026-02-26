@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 import dj_database_url
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-46x@yuhohw*bsg...'
@@ -29,28 +30,27 @@ ROOT_URLCONF = "OnlineSalesManagementSystem.urls"
 WSGI_APPLICATION = "OnlineSalesManagementSystem.wsgi.application"
 
 
-# Allowed Hosts
-
-
-ALLOWED_HOSTS = [
-    "online-sales-management-system.onrender.com",
-    "onlinesalesmanagementsystem.onrender.com",
-    "localhost",
-    "127.0.0.1"
-]
-
 
 # CORS
 CORS_ALLOW_CREDENTIALS = True
-
 
 CORS_ALLOWED_ORIGINS = [
     "https://monumental-cat-05e2a6.netlify.app"
 ]
 
+CORS_ALLOW_HEADERS = [
+    "content-type",
+    "authorization",
+    "x-csrftoken",
+]
+
 CSRF_TRUSTED_ORIGINS = [
     "https://monumental-cat-05e2a6.netlify.app"
 ]
+
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
 
 # Apps
 
@@ -72,7 +72,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+
     "whitenoise.middleware.WhiteNoiseMiddleware",
+
     "corsheaders.middleware.CorsMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -90,10 +92,19 @@ MIDDLEWARE = [
 
 DATABASES = {
     "default": dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        default="postgresql://online_sales_db_user:FW6inCvNMbNscC7Pyz9qksICuUD9tlX0@dpg-d6fahu9r0fns73f6r4dg-a.oregon-postgres.render.com/online_sales_db",
         conn_max_age=600,
+        ssl_require=True
     )
 }
+
+ALLOWED_HOSTS = [
+    "online-sales-management-system.onrender.com",
+    "onlinesalesmanagementsystem.onrender.com",
+    ".onrender.com",
+    "localhost",
+    "127.0.0.1"
+]
 
 # Static Files
 
