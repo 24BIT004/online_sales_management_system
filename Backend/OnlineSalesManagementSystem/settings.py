@@ -8,15 +8,45 @@ SECRET_KEY = 'django-insecure-46x@yuhohw*bsg...'
 
 DEBUG = False
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / "templates"],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+ROOT_URLCONF = "OnlineSalesManagementSystem.urls"
+
+WSGI_APPLICATION = "OnlineSalesManagementSystem.wsgi.application"
+
 
 # Allowed Hosts
 
 
 ALLOWED_HOSTS = [
-    "onlinesalesmanagementsystem.onrender.com",
     "online-sales-management-system.onrender.com",
+    "onlinesalesmanagementsystem.onrender.com",
     "localhost",
     "127.0.0.1"
+]
+
+
+# CORS
+CORS_ALLOW_CREDENTIALS = True
+
+
+
+CORS_ALLOWED_ORIGINS = [
+    "https://monumental-cat-05e2a6.netlify.app",
 ]
 
 
@@ -39,47 +69,37 @@ INSTALLED_APPS = [
 # Middleware
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 
-    'corsheaders.middleware.CorsMiddleware',
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
 
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-
-    'django.middleware.csrf.CsrfViewMiddleware',
-
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
 ]
 
-# CORS
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://online-sales-management-system.onrender.com"
-]
 
 
 # Database
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get("DATABASE_URL"),
+        default=os.environ.get(
+            "DATABASE_URL",
+            f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+        ),
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=False
     )
 }
 
 # Static Files
 
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-STATICFILES_DIRS = []

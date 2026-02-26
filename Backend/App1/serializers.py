@@ -6,28 +6,42 @@ from .models import GuestOrder
 # =========================
 # USER REGISTRATION
 # =========================
-class UserRegisterSerializer(serializers.ModelSerializer):
+class UserRegisterSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    email = serializers.EmailField(required=False)
     password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
 
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'password', 'confirm_password']
-
     def validate(self, data):
-        if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError("Passwords do not match")
+
+        username = data.get("username")
+        email = data.get("email")
+        password = data.get("password")
+        confirm_password = data.get("confirm_password")
+
+        if password != confirm_password:
+            raise serializers.ValidationError({
+                "password": "Passwords do not match"
+            })
+
+        if User.objects.filter(username=username).exists():
+            raise serializers.ValidationError({
+                "username": "Username already exists"
+            })
+
+        if email and User.objects.filter(email=email).exists():
+            raise serializers.ValidationError({
+                "email": "Email already registered"
+            })
+
         return data
 
     def create(self, validated_data):
-        validated_data.pop('confirm_password')
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data.get('email'),
-            password=validated_data['password']
+        return User.objects.create_user(
+            username=validated_data["username"],
+            email=validated_data.get("email"),
+            password=validated_data["password"]
         )
-        return user
-
 
 # =========================
 # USER LOGIN
