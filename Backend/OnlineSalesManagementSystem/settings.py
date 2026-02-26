@@ -44,11 +44,13 @@ ALLOWED_HOSTS = [
 CORS_ALLOW_CREDENTIALS = True
 
 
-
 CORS_ALLOWED_ORIGINS = [
-    "https://monumental-cat-05e2a6.netlify.app",
+    "https://monumental-cat-05e2a6.netlify.app"
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://monumental-cat-05e2a6.netlify.app"
+]
 
 # Apps
 
