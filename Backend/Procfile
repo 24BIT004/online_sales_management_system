@@ -1,1 +1,1 @@
-web: gunicorn OnlineSalesManagementSystem.wsgi
+web: sh -c "python manage.py migrate --noinput && gunicorn OnlineSalesManagementSystem.wsgi"
