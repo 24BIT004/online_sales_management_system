@@ -128,3 +128,7 @@ class GuestOrderView(APIView):
             }, status=status.HTTP_204_NO_CONTENT)
         except GuestOrder.DoesNotExist:
             raise NotFound("Order not found")
+        from django.shortcuts import render
+
+def register(request):
+    return render(request, 'register.html')
