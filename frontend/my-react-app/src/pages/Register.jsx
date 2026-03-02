@@ -31,9 +31,18 @@ const Register = () => {
         }
 
         try {
-            await axios.post("https://online-sales-management-system.onrender.com/register/", formData);
+            await axios.post(
+                "https://online-sales-management-system.onrender.com/register/",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
+
             alert("Registration successful!");
-            navigate("/login"); // Redirect to login after registration
+            navigate("/login");
         } catch (err) {
             if (err.response && err.response.data) {
                 setError(
