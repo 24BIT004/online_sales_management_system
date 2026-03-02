@@ -6,6 +6,7 @@ from django.db.models import Q
 from .models import GuestOrder
 from .serializers import UserRegisterSerializer, UserLoginSerializer, GuestOrderSerializer
 from django.http import HttpResponse
+from django.shortcuts import render
 
 
 
@@ -128,7 +129,6 @@ class GuestOrderView(APIView):
             }, status=status.HTTP_204_NO_CONTENT)
         except GuestOrder.DoesNotExist:
             raise NotFound("Order not found")
-        from django.shortcuts import render
 
 def register(request):
     return render(request, 'register.html')
