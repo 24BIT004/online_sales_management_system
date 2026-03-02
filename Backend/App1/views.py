@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import NotFound
 from django.db.models import Q
+from django.db import OperationalError, ProgrammingError
 from .models import GuestOrder
 from .serializers import UserRegisterSerializer, UserLoginSerializer, GuestOrderSerializer
 from django.http import HttpResponse
@@ -19,11 +20,19 @@ def home(request):
 # =========================
 class UserRegisterView(APIView):
     def post(self, request):
-        serializer = UserRegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            serializer = UserRegisterSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except (OperationalError, ProgrammingError):
+            return Response(
+                {
+                    "message": "Database is not ready. Run migrations on the server and retry."
+                },
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
 
 
 # =========================
