@@ -34,9 +34,7 @@ WSGI_APPLICATION = "OnlineSalesManagementSystem.wsgi.application"
 # CORS
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGINS = [
-    "https://monumental-cat-05e2a6.netlify.app"
-]
+
 
 CORS_ALLOW_HEADERS = [
     "content-type",
@@ -45,7 +43,8 @@ CORS_ALLOW_HEADERS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://monumental-cat-05e2a6.netlify.app"
+    "https://monumental-cat-05e2a6.netlify.app",
+    'https://monumental-cat-05e2a6.netlify.app'
 ]
 
 SECURE_SSL_REDIRECT = False
@@ -105,10 +104,13 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1"
 ]
-
+CORS_ALLOWED_ORIGINS = [
+    "https://monumental-cat-05e2a6.netlify.app",
+    'https://monumental-cat-05e2a6.netlify.app'
+]
 # Static Files
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
+CORS_ALLOW_ALL_ORIGINS = True
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
