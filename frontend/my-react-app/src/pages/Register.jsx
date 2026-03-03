@@ -3,6 +3,10 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaLock, FaEnvelope, FaArrowLeft } from "react-icons/fa";
 
+const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL ||
+    "https://online-sales-management-system.onrender.com";
+
 const Register = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -23,6 +27,10 @@ const Register = () => {
         e.preventDefault();
         setError("");
         setLoading(true);
+        const loadingGuard = setTimeout(() => {
+            setLoading(false);
+            setError("Request took too long. Please try again.");
+        }, 20000);
 
         if (formData.password !== formData.confirm_password) {
             setError("Passwords do not match!");
@@ -32,28 +40,38 @@ const Register = () => {
 
         try {
             await axios.post(
-                "https://online-sales-management-system.onrender.com/register/",
+                `${API_BASE_URL}/api/register/`,
                 formData,
                 {
                     headers: {
                         "Content-Type": "application/json"
-                    }
+                    },
+                    timeout: 15000,
                 }
             );
 
             alert("Registration successful!");
             navigate("/login");
         } catch (err) {
-            if (err.response && err.response.data) {
-                setError(
-                    err.response.data.username ||
-                    err.response.data.email ||
-                    "Registration failed."
-                );
+            if (err.code === "ECONNABORTED") {
+                setError("Request timeout. Check internet/backend and try again.");
+            } else if (err.response && err.response.data) {
+                const data = err.response.data;
+                const message =
+                    data.message ||
+                    data.detail ||
+                    data.non_field_errors?.[0] ||
+                    data.username?.[0] ||
+                    data.email?.[0] ||
+                    data.password?.[0] ||
+                    data.confirm_password?.[0] ||
+                    "Registration failed.";
+                setError(message);
             } else {
-                setError("Server error. Please try again.");
+                setError("Network/CORS error. Check backend deployment and CORS settings.");
             }
         } finally {
+            clearTimeout(loadingGuard);
             setLoading(false);
         }
     };
