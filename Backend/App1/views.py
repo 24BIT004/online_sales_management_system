@@ -40,15 +40,23 @@ class UserRegisterView(APIView):
 # =========================
 class UserLoginView(APIView):
     def post(self, request):
-        serializer = UserLoginSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.validated_data
-            return Response({
-                "message": "Login successful",
-                "user_id": user.id,
-                "username": user.username
-            }, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            serializer = UserLoginSerializer(data=request.data)
+            if serializer.is_valid():
+                user = serializer.validated_data
+                return Response({
+                    "message": "Login successful",
+                    "user_id": user.id,
+                    "username": user.username
+                }, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except (OperationalError, ProgrammingError):
+            return Response(
+                {
+                    "message": "Database is not ready. Run migrations on the server and retry."
+                },
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
 
 
 # =========================

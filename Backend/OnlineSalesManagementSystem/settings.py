@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-46x@yuhohw*bsg...'
 
-DEBUG = False
+DEBUG = True
 
 TEMPLATES = [
     {
@@ -89,12 +89,21 @@ MIDDLEWARE = [
 
 # Database
 
+# DATABASES = {
+#     "default": dj_database_url.config(
+#         default="postgresql://online_sales_db_user:FW6inCvNMbNscC7Pyz9qksICuUD9tlX0@dpg-d6fahu9r0fns73f6r4dg-a.oregon-postgres.render.com/online_sales_db",
+#         conn_max_age=600,
+#         ssl_require=True
+#     )
+# }
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 DATABASES = {
-    "default": dj_database_url.config(
-        default="postgresql://online_sales_db_user:FW6inCvNMbNscC7Pyz9qksICuUD9tlX0@dpg-d6fahu9r0fns73f6r4dg-a.oregon-postgres.render.com/online_sales_db",
-        conn_max_age=600,
-        ssl_require=True
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 ALLOWED_HOSTS = [
