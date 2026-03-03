@@ -61,7 +61,7 @@ const Register = () => {
                     data.email?.[0] ||
                     data.password?.[0] ||
                     data.confirm_password?.[0] ||
-                    "Registration failed.";
+                    `Registration failed (${err.response.status}).`;
                 setError(message);
             } else {
                 setError("Network/CORS error. Check backend deployment and CORS settings.");

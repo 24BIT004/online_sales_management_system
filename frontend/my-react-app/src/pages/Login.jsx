@@ -21,10 +21,19 @@ const Login = () => {
 
 
         try {
-            const response = await axios.post(`${API_BASE_URL}/api/login/`, {
-                username,
-                password,
-            });
+            await axios.post(
+                `${API_BASE_URL}/api/login/`,
+                {
+                    username,
+                    password,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    timeout: 60000,
+                }
+            );
 
             alert("Login successful!");
 
@@ -32,17 +41,19 @@ const Login = () => {
             navigate("/Dashboard");
 
         } catch (err) {
-            if (err.response && err.response.data) {
+            if (err.code === "ECONNABORTED") {
+                setError("Login timeout (60s). Backend may be sleeping or down.");
+            } else if (err.response && err.response.data) {
                 const data = err.response.data;
                 const message =
                     data.detail ||
                     data.non_field_errors?.[0] ||
                     data.username?.[0] ||
                     data.password?.[0] ||
-                    "Invalid username or password";
+                    `Login failed (${err.response.status}).`;
                 setError(message);
             } else {
-                setError("Server error. Please try again.");
+                setError("Network/CORS error. Check backend URL, CORS, and deploy status.");
             }
         } finally {
             setLoading(false);
