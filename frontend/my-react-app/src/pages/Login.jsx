@@ -3,6 +3,10 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaLock } from "react-icons/fa";
 
+const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL ||
+    "https://online-sales-management-system.onrender.com";
+
 const Login = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
@@ -17,7 +21,7 @@ const Login = () => {
 
 
         try {
-            const response = await axios.post("http://127.0.0.1:8000/api/login/", {
+            const response = await axios.post(`${API_BASE_URL}/login/`, {
                 username,
                 password,
             });
@@ -29,7 +33,14 @@ const Login = () => {
 
         } catch (err) {
             if (err.response && err.response.data) {
-                setError(err.response.data.detail || "Invalid username or password");
+                const data = err.response.data;
+                const message =
+                    data.detail ||
+                    data.non_field_errors?.[0] ||
+                    data.username?.[0] ||
+                    data.password?.[0] ||
+                    "Invalid username or password";
+                setError(message);
             } else {
                 setError("Server error. Please try again.");
             }
