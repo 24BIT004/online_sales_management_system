@@ -27,10 +27,6 @@ const Register = () => {
         e.preventDefault();
         setError("");
         setLoading(true);
-        const loadingGuard = setTimeout(() => {
-            setLoading(false);
-            setError("Request took too long. Please try again.");
-        }, 20000);
 
         if (formData.password !== formData.confirm_password) {
             setError("Passwords do not match!");
@@ -46,7 +42,7 @@ const Register = () => {
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    timeout: 15000,
+                    timeout: 60000,
                 }
             );
 
@@ -71,7 +67,6 @@ const Register = () => {
                 setError("Network/CORS error. Check backend deployment and CORS settings.");
             }
         } finally {
-            clearTimeout(loadingGuard);
             setLoading(false);
         }
     };
